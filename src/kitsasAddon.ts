@@ -47,6 +47,10 @@ export class KitsasAddon {
     options.staticRoute = options.staticRoute ?? '/static';
     options.staticPath = options.staticPath ?? 'public';
     options.redirectRoot = options.redirectRoot ?? true;
+    options.baseUrl =
+      options.baseUrl ??
+      process.env.BASE_URL ??
+      'http://localhost:' + options.port;
 
     this.options = options;
     this.app = express();
@@ -130,6 +134,13 @@ export class KitsasAddon {
    */
   public getApp(): Express {
     return this.app;
+  }
+
+  public getConnection(): KitsasConnectionInterface {
+    if (!this.connection) {
+      throw new Error('Kitsas connection not available');
+    }
+    return this.connection;
   }
 
   private unreadyMiddleware(

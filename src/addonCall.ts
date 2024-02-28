@@ -10,6 +10,7 @@ import {
 } from 'kitsas-library';
 
 import { AddonSession } from './addonSession.interface';
+import { KitsasAddon } from './kitsasAddon';
 
 /**
  * Call information of addon
@@ -37,7 +38,8 @@ export class AddonCall {
    * @returns Connection to Kitsas Server
    */
   public connection(): KitsasConnectionInterface {
-    return this.request.app.get('Addon').getConnection();
+    const addon: KitsasAddon = this.request.app.get('Addon');
+    return addon.getConnection();
   }
 
   /**

@@ -31,7 +31,7 @@ Options can be configured with [AddonOptions](https://kitsas-oy.github.io/kitsas
 import addon from './addon';
 import { AddonCall } from 'kitsas-addon-library';
 import { Request, Response } from 'express';
-const router = addon.createRouter('/');
+const router = addon.createRouter('/addon');
 
 router.get('/', async (req: Request, res: Response) => {
   const call = new AddonCall(req);
@@ -54,9 +54,9 @@ Usually router handles get an [AddonCall](https://kitsas-oy.github.io/kitsasaddo
 ```typescript
 import addon from './addon';
 
-import addonRoute from './addonRouter';
+import addonRouter from './addonRouter';
 
-void addon.start([addonRoute]);
+void addon.start([addonRouter]);
 ```
 
 Remember to include all the routers in the `start` call!

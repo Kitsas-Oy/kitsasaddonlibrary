@@ -43,4 +43,9 @@ export interface AddonOptions {
    * @default true
    */
   redirectRoot?: boolean;
+
+  /**
+   * Base URL for the addon
+   */
+  baseUrl?: string;
 }
