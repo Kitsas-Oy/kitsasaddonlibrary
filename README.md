@@ -1,103 +1,56 @@
-# typescript-library-template
+# Kitsas Addon Library
 
-A starter template for TypeScript libraries. Use this repository as a starting point for your own TypeScript library. This template includes the following features:
-
-- Compiles TypeScript code using both the `tsconfig.json` and `tsconfig.module.json` files.
-- Formats TypeScript code using [Prettier](https://prettier.io).
-- Lints TypeScript code using [ESLint](https://eslint.org).
-- Runs unit tests using [AVA](https://github.com/avajs/ava).
-- Generates code coverage reports using NYC.
-- Generates HTML documentation using [TypeDoc](https://typedoc.org).
-- Uses [Husky](https://github.com/typicode/husky) Git hooks and [Lint-staged](https://github.com/okonet/lint-staged) pre-commit hooks.
+Library for Kitsas Addons. See also [Template for Kitsas Addons](https://github.com/Kitsas-Oy/kitsas-addon-template) and [Kitsas Library](https://github.com/Kitsas-Oy/kitsaslibrary)
 
 ## Installation
 
 Clone the repository:
 
 ```bash
-git clone https://github.com/amelspahic/typescript-library-template.git
+npm install --save kitsas-addon-library
 ```
 
-Install the dependencies:
+## Creating an addon
 
-```bash
-npm install
+Create an addon instance
+
+```typescript
+import { KitsasAddon } from 'kitsas-addon-library';
+const addon = new KitsasAddon({
+  appName: 'My Addon',
+});
+
+export default addon;
 ```
 
-There are several scripts available to help you get started:
+Create routers
 
----
+```typescript
+import addon from './addon';
+import { AddonCall } from 'kitsas-addon-library';
+import { Request, Response } from 'express';
+const router = addon.createRouter('/');
 
-Compile the TypeScript code using both the `tsconfig.json` and `tsconfig.module.json` files.
+router.get('/', async (req: Request, res: Response) => {
+  const call = new AddonCall(req);
+  const logs = await call.getLogs();
 
-```bash
-npm run build
+  if (call.isActive()) {
+    res.render('main', { logs: logs });
+  } else {
+    res.render('introduction');
+  }
+});
+
+export default router;
 ```
 
----
+Create index.ts
 
-Formats the TypeScript code using Prettier and lints the code using ESLint, fixing any issues found.
+```typescript
+import addon from './addon';
 
-```bash
-npm run fix
+import addonRoute from './addonRouter';
+
+void addon.start([addonRoute]);
 ```
-
----
-
-Lints the TypeScript code using ESLint, checks the code formatting using Prettier, and runs the unit tests using AVA.
-
-```bash
-npm run test
-```
-
----
-
-Watches for changes in the TypeScript code and recompiles the code using `tsconfig.json`.
-
-```bash
-npm run watch:build
-```
-
----
-
-Watches for changes in the TypeScript code and re-runs the unit tests using AVA.
-
-```bash
-npm run watch:test
-```
-
----
-
-Generates an HTML report of the code coverage using NYC and opens the report in the browser.
-
-```bash
-npm run cov
-```
-
----
-
-Generates HTML documentation of the TypeScript code and opens the documentation in the browser.
-
-```bash
-npm run doc
-```
-
----
-
-The template uses [Husky](https://github.com/typicode/husky) and [Lint-staged](https://github.com/okonet/lint-staged) to run pre-commit hooks that ensure your code is formatted, linted, tested, and documented before committing.
-
----
-
-For more information on available scripts, see the `Scripts` section of the `package.json` file.
-
-## Contributing
-
-To contribute to the project, please follow the guidelines for submitting issues and pull requests.
-
-## License
-
-This project is licensed under the MIT License.
-
-## Acknowledgements
-
-This project uses Prettier, ESLint, AVA, NYC, Husky, Lint-staged, TypeDoc.

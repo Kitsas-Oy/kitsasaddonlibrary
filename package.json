@@ -1,12 +1,12 @@
 {
-  "name": "typescript-library-template",
-  "version": "1.0.0",
-  "description": "Starter template for TypeScript libraries",
+  "name": "kitsas-addon-library",
+  "version": "0.0.1",
+  "description": "Library for Kitsas Addons",
   "main": "lib/main/index.js",
   "typings": "lib/main/index.d.ts",
   "module": "lib/module/index.js",
-  "repository": "https://github.com/amelspahic/typescript-library-template.git",
-  "author": "Amel Spahic",
+  "repository": "https://github.com/Kitsas-Oy/kitsasaddonlibrary",
+  "author": "Kitsas Oy",
   "license": "MIT",
   "keywords": [
     "typescript",
@@ -44,6 +44,7 @@
   "devDependencies": {
     "@ava/typescript": "^3.0.1",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@types/morgan": "^1.9.9",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",
     "ava": "^5.2.0",
@@ -92,5 +93,13 @@
     "exclude": [
       "**/*.spec.js"
     ]
+  },
+  "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/express-session": "^1.18.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "express-session": "^1.18.0",
+    "morgan": "^1.10.0"
   }
 }
