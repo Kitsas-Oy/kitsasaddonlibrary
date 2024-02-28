@@ -2,9 +2,9 @@
 
 Library for Kitsas Addons. See also [Template for Kitsas Addons](https://github.com/Kitsas-Oy/kitsas-addon-template) and [Kitsas Library](https://github.com/Kitsas-Oy/kitsaslibrary)
 
-## Installation
+[Documentation on GitHub Pages](https://kitsas-oy.github.io/kitsasaddonlibrary/)
 
-Clone the repository:
+## Installation
 
 ```bash
 npm install --save kitsas-addon-library
@@ -12,7 +12,7 @@ npm install --save kitsas-addon-library
 
 ## Creating an addon
 
-Create an addon instance
+#### Create an addon instance
 
 ```typescript
 import { KitsasAddon } from 'kitsas-addon-library';
@@ -23,7 +23,9 @@ const addon = new KitsasAddon({
 export default addon;
 ```
 
-Create routers
+Options can be configured with [AddonOptions](https://kitsas-oy.github.io/kitsasaddonlibrary/interfaces/AddonOptions.html) or environment variables.
+
+#### Create routers
 
 ```typescript
 import addon from './addon';
@@ -45,7 +47,9 @@ router.get('/', async (req: Request, res: Response) => {
 export default router;
 ```
 
-Create index.ts
+Usually router handles get an [AddonCall](https://kitsas-oy.github.io/kitsasaddonlibrary/classes/AddonCall.html) object containing information about the call and methods to interact with the Kitsas Server.
+
+#### Create index.ts
 
 ```typescript
 import addon from './addon';
@@ -54,3 +58,5 @@ import addonRoute from './addonRouter';
 
 void addon.start([addonRoute]);
 ```
+
+Remember to include all the routers in the `start` call!

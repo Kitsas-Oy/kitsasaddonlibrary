@@ -13,7 +13,7 @@ export interface AddonOptions {
   port?: number;
   /**
    * Connection options for the Kitsas server
-   * Look at the KitsasConnectionOptions in kitsas-library for more details
+   * Look at the [KitsasConnectionOptions](https://kitsas-oy.github.io/kitsaslibrary/classes/KitsasConnectionOptions.html) in kitsas-library for more details
    * Can be configured via environment variables
    */
   connection?: KitsasConnectionOptions;
