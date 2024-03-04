@@ -22,6 +22,7 @@ import { KitsasAddon } from './kitsasAddon';
 export class AddonCall {
   private request: Request;
   private session: AddonSession;
+  private myConnection: KitsasConnectionInterface;
 
   /**
    * Constructor for AddonCall
@@ -31,6 +32,9 @@ export class AddonCall {
   constructor(request: Request) {
     this.request = request;
     this.session = request.session as AddonSession;
+
+    const addon: KitsasAddon = request.app.get('Addon');
+    this.myConnection = addon.getConnection();
   }
 
   /**
@@ -38,8 +42,7 @@ export class AddonCall {
    * @returns Connection to Kitsas Server
    */
   public connection(): KitsasConnectionInterface {
-    const addon: KitsasAddon = this.request.app.get('Addon');
-    return addon.getConnection();
+    return this.myConnection;
   }
 
   /**
@@ -253,5 +256,14 @@ export class AddonCall {
    */
   async getBook(): Promise<KitsasBookInterface> {
     return await this.connection().getBook(this.organizationId());
+  }
+
+  /**
+   * Get the base URL of the service
+   *
+   * @returns Base URL of the service
+   */
+  baseUrl(): string {
+    return this.request.app.locals.baseUrl;
   }
 }
