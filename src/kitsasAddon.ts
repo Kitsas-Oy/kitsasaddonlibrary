@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 import { randomBytes } from 'crypto';
 
-import * as dayjs from 'dayjs';
+import dayJs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import express, {
   Express,
@@ -19,7 +19,7 @@ import { AddonOptions } from './addonOptions.dto';
 import { AddonSession } from './addonSession.interface';
 import { morganFormatter } from './morganFormatter';
 
-dayjs.extend(utc);
+dayJs.extend(utc);
 
 /**
  * Kitsas Addon Class
@@ -60,7 +60,7 @@ export class KitsasAddon {
     this.app = express();
     this.app.locals.appName = options.appName;
     this.app.locals.baseUrl = options.baseUrl;
-    this.app.locals.dayjs = dayjs;
+    this.app.locals.dayjs = dayJs;
     this.app.set('Addon', this);
 
     this.app.set('view engine', options.viewEngine);
