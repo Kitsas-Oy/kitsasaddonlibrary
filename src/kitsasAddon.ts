@@ -117,8 +117,7 @@ export class KitsasAddon {
     console.log(
       JSON.stringify({
         level: 'INFO',
-        message: 'Init routers',
-        routers: routers.map((r) => r.name),
+        message: `Init ${routers.length} routers`,
       })
     );
 
