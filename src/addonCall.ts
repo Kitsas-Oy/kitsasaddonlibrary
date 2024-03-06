@@ -250,6 +250,18 @@ export class AddonCall {
   }
 
   /**
+   * Delete notifications
+   *
+   * @param category Category of the notification (optional)
+   */
+  async deleteNotifications(category?: string): Promise<void> {
+    await this.connection().deleteNotifications(
+      this.organizationId(),
+      category
+    );
+  }
+
+  /**
    * Get the book object to interact with the book
    *
    * @returns Book object
