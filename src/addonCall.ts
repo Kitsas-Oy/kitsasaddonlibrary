@@ -82,6 +82,42 @@ export class AddonCall {
   }
 
   /**
+   * Organization (book) businessId
+   *
+   * @returns businessId of the organization
+   */
+  public businessId(): string {
+    return this.session.call?.organization.businessId ?? '';
+  }
+
+  /**
+   * Office name
+   *
+   * @returns Name of the office
+   */
+  public officeId(): string {
+    return this.session.call?.office?.id ?? '';
+  }
+
+  /**
+   * Office name
+   *
+   * @returns Name of the office
+   */
+  public officeName(): string {
+    return this.session.call?.office?.name ?? '';
+  }
+
+  /**
+   * Office type
+   *
+   * @returns Type of the office
+   */
+  public officeBusinessId(): string {
+    return this.session.call?.office?.businessId ?? '';
+  }
+
+  /**
    *
    * Rights of this sessios
    *
