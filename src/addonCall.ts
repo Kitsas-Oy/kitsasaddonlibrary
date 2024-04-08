@@ -80,7 +80,6 @@ export class AddonCall {
   public organizationId(): string {
     return this.session.call?.organization.id ?? '';
   }
-
   /**
    * Organization (book) businessId
    *
