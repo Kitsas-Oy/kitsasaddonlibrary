@@ -1,6 +1,6 @@
 {
   "name": "kitsas-addon-library",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Library for Kitsas Addons",
   "main": "lib/main/index.js",
   "typings": "lib/main/index.d.ts",
