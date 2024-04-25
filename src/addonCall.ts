@@ -64,6 +64,25 @@ export class AddonCall {
   }
 
   /**
+   * User email
+   *
+   * @returns Email of the user
+   */
+  public userEmail(): string {
+    return this.session.call?.user.email ?? '';
+  }
+
+  /**
+   *
+   * User rights
+   *
+   * @returns Rights of the user
+   */
+  public userRights(): string[] {
+    return this.session.call?.user.rights ?? [];
+  }
+
+  /**
    * Organization (book) name
    *
    * @returns Name of the organization
@@ -90,9 +109,9 @@ export class AddonCall {
   }
 
   /**
-   * Office name
+   * Office Id
    *
-   * @returns Name of the office
+   * @returns Id of the office
    */
   public officeId(): string {
     return this.session.call?.office?.id ?? '';
@@ -108,12 +127,21 @@ export class AddonCall {
   }
 
   /**
+   * Office businessId
+   *
+   * @returns Business id of the office
+   */
+  public officeBusinessId(): string {
+    return this.session.call?.office?.businessId ?? '';
+  }
+
+  /**
    * Office type
    *
    * @returns Type of the office
    */
-  public officeBusinessId(): string {
-    return this.session.call?.office?.businessId ?? '';
+  public officeType(): string {
+    return this.session.call?.office?.type ?? '';
   }
 
   /**

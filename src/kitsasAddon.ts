@@ -141,6 +141,14 @@ export class KitsasAddon {
     return this.app;
   }
 
+  public baseUrl(): string {
+    return (
+      this.options.baseUrl ??
+      process.env.BASE_URL ??
+      'http://localhost:' + this.options.port
+    );
+  }
+
   public getConnection(): KitsasConnectionInterface {
     if (!this.connection) {
       throw new Error('Kitsas connection not available');
