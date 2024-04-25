@@ -7,6 +7,7 @@ import {
   LogStatus,
   Notification,
   NotificationType,
+  OfficeType,
 } from 'kitsas-library';
 
 import { AddonSession } from './addonSession.interface';
@@ -140,8 +141,8 @@ export class AddonCall {
    *
    * @returns Type of the office
    */
-  public officeType(): string {
-    return this.session.call?.office?.type ?? '';
+  public officeType(): OfficeType {
+    return this.session.call?.office?.type ?? OfficeType.KITSAS;
   }
 
   /**
