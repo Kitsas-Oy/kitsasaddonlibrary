@@ -111,8 +111,19 @@ export class KitsasAddon {
   /**
    * Start the addon server
    *
+   * @param routers - Routers to use
+   *
    */
-  public start(): void {
+  public start(routers: Router[]): void {
+    if (routers.length !== this.routers.length) {
+      console.error(
+        JSON.stringify({
+          level: 'ERROR',
+          message: `Router count mismatch ${routers.length} / ${this.routers.length} `,
+        })
+      );
+    }
+
     (async () => {
       await this.connect();
       this.app.listen(this.options.port, () => {
@@ -213,6 +224,7 @@ export class KitsasAddon {
   /**
    * Create a new router
    *
+   * Remember to include the routers in the start method
    *
    * @param path Path to route, default is /addon
    * @param useMiddleWare Use middleware, default is true. Set to false with webhooks etc.
