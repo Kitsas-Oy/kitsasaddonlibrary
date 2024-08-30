@@ -32,6 +32,7 @@ export class KitsasAddon {
   private app: Express;
   private connection: KitsasConnectionInterface | null = null;
   private options: AddonOptions;
+  private routers: Router[] = [];
 
   /**
    * Constructor for KitsasAddon
@@ -99,7 +100,7 @@ export class KitsasAddon {
       console.log(
         JSON.stringify({
           level: 'WARN',
-          message: 'Failed to connect to Kitsas. Retrying in 15 seconds',
+          message: 'Failed to connect to Kitsas. Retrying in 5 seconds',
           error: (error as Error).message,
         })
       );
@@ -110,26 +111,21 @@ export class KitsasAddon {
   /**
    * Start the addon server
    *
-   * @param routers - Array of routers to use
    */
-  public start(routers: Router[]): void {
-    this.connect();
-    console.log(
-      JSON.stringify({
-        level: 'INFO',
-        message: `Init ${routers.length} routers`,
-      })
-    );
-
-    this.app.listen(this.options.port, () => {
-      console.log(
-        JSON.stringify({
-          level: 'INFO',
-          message: 'Listening for connections',
-          port: this.options.port,
-        })
-      );
-    });
+  public start(): void {
+    (async () => {
+      await this.connect();
+      this.app.listen(this.options.port, () => {
+        console.log(
+          JSON.stringify({
+            level: 'INFO',
+            message: `Listening for connections`,
+            port: this.options.port,
+            routerCount: this.routers.length,
+          })
+        );
+      });
+    })();
   }
 
   /**
@@ -217,7 +213,6 @@ export class KitsasAddon {
   /**
    * Create a new router
    *
-   * Remember to include this router in the start method
    *
    * @param path Path to route, default is /addon
    * @param useMiddleWare Use middleware, default is true. Set to false with webhooks etc.
@@ -229,6 +224,7 @@ export class KitsasAddon {
       router.use(this.middleware.bind(this));
     }
     this.app.use(path, router);
+    this.routers.push(router);
     return router;
   }
 }
