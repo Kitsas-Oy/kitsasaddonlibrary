@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 import { randomBytes } from 'crypto';
 
+import RedisStore from 'connect-redis';
 import dayJs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import express, {
@@ -14,6 +15,7 @@ import express, {
 import session from 'express-session';
 import { KitsasConnectionInterface, KitsasService } from 'kitsas-library';
 import morgan from 'morgan';
+import { createClient } from 'redis';
 
 import { AddonOptions } from './addonOptions.dto';
 import { AddonSession } from './addonSession.interface';
@@ -67,6 +69,10 @@ export class KitsasAddon {
     this.app.set('view engine', options.viewEngine);
     this.app.use(
       session({
+        store: new RedisStore({
+          client: createClient({ url: process.env.REDIS_URL }),
+          prefix: (process.env.REDIS_PREFIX ?? 'SESSION') + ':',
+        }),
         secret: options.sessionSecret,
         resave: false,
         saveUninitialized: false,
