@@ -70,7 +70,9 @@ export class KitsasAddon {
     this.app.use(
       session({
         store: new RedisStore({
-          client: createClient({ url: process.env.REDIS_URL }),
+          client: createClient({
+            url: process.env.REDIS_URL ?? 'redis://localhost:6379',
+          }),
           prefix: (process.env.REDIS_PREFIX ?? 'SESSION') + ':',
         }),
         secret: options.sessionSecret,
