@@ -1,6 +1,6 @@
 {
   "name": "kitsas-addon-library",
-  "version": "0.0.27",
+  "version": "0.0.33",
   "description": "Library for Kitsas Addons",
   "main": "lib/main/index.js",
   "typings": "lib/main/index.d.ts",
@@ -11,12 +11,7 @@
   "keywords": [
     "typescript",
     "library",
-    "template",
-    "starter",
-    "starter-template",
-    "starter-template-typescript",
-    "starter-template-typescript-library",
-    "tests"
+    "kitsas"
   ],
   "scripts": {
     "build": "run-p build:*",

@@ -8,7 +8,7 @@ test('Create a maintenance router', (t) => {
   const mRouter = new MaintenanceRouter(addon);
 
   mRouter.addFunction('test', async () => {
-    console.log('test');
+    console.debug('test');
   });
   t.is(mRouter.hasFunction('test'), true);
 });

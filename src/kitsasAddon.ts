@@ -23,6 +23,11 @@ import { morganFormatter } from './morganFormatter';
 
 dayJs.extend(utc);
 
+interface RouterItem {
+  path: string;
+  router: Router;
+}
+
 /**
  * Kitsas Addon Class
  *
@@ -34,7 +39,7 @@ export class KitsasAddon {
   private app: Express;
   private connection: KitsasConnectionInterface | null = null;
   private options: AddonOptions;
-  private routers: Router[] = [];
+  private routers: RouterItem[] = [];
 
   /**
    * Constructor for KitsasAddon
@@ -67,29 +72,18 @@ export class KitsasAddon {
     this.app.set('Addon', this);
 
     this.app.set('view engine', options.viewEngine);
-    this.app.use(
-      session({
-        store: new RedisStore({
-          client: createClient({
-            url: process.env.REDIS_URL ?? 'redis://localhost:6379',
-          }),
-          prefix: (process.env.REDIS_PREFIX ?? 'SESSION') + ':',
-        }),
-        secret: options.sessionSecret,
-        resave: false,
-        saveUninitialized: false,
-      })
-    );
+
     this.app.use(morgan(morganFormatter));
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
     this.app.use(this.unreadyMiddleware.bind(this));
+    this.app.use(options.staticRoute, express.static(options.staticPath));
+
     if (options.redirectRoot) {
       this.app.get('/', (req: Request, res: Response) => {
         res.redirect('addon' + req.url);
       });
     }
-    this.app.use(options.staticRoute, express.static(options.staticPath));
   }
 
   private async connect() {
@@ -123,6 +117,7 @@ export class KitsasAddon {
    *
    */
   public start(routers: Router[]): void {
+    console.debug(`Starting addon ${this.options.appName}`);
     if (routers.length !== this.routers.length) {
       console.error(
         JSON.stringify({
@@ -133,6 +128,59 @@ export class KitsasAddon {
     }
 
     (async () => {
+      try {
+        const redisClient = createClient({
+          url: process.env.REDIS_URL ?? 'redis://localhost:6379',
+        });
+        await redisClient.connect();
+        const prefix = (process.env.REDIS_PREFIX ?? 'SESSION') + ':';
+        await redisClient.set(prefix + 'test', 'test', { EX: 10 });
+
+        const redisStore = new RedisStore({
+          client: redisClient,
+          prefix: (process.env.REDIS_PREFIX ?? 'SESSION') + ':',
+        });
+        console.log(
+          JSON.stringify({
+            level: 'INFO',
+            message: 'Redis connection successful',
+            url: process.env.REDIS_URL,
+          })
+        );
+
+        this.app.use(
+          session({
+            store: redisStore,
+            secret:
+              this.options.sessionSecret ?? randomBytes(32).toString('hex'),
+            resave: false,
+            saveUninitialized: false,
+          })
+        );
+      } catch (error) {
+        console.error(
+          JSON.stringify({
+            level: 'ERROR',
+            message: `Redis-connection failed.`,
+            error: (error as Error).message,
+            url: process.env.REDIS_URL,
+          })
+        );
+        this.app.use(
+          session({
+            secret:
+              this.options.sessionSecret ?? randomBytes(32).toString('hex'),
+            resave: false,
+            saveUninitialized: false,
+          })
+        );
+      }
+
+      // Init all routers
+      for (const router of this.routers) {
+        this.app.use(router.path, router.router);
+      }
+
       await this.connect();
       this.app.listen(this.options.port, () => {
         console.log(
@@ -243,8 +291,7 @@ export class KitsasAddon {
     if (useMiddleWare) {
       router.use(this.middleware.bind(this));
     }
-    this.app.use(path, router);
-    this.routers.push(router);
+    this.routers.push({ path, router });
     return router;
   }
 }
