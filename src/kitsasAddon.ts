@@ -265,6 +265,16 @@ export class KitsasAddon {
         session.language = (req.query['language'] as string) || 'fi';
         req.app.locals.language = session.language;
         session.data = {};
+        req.session.save();
+        console.debug(
+          JSON.stringify({
+            level: 'DEBUG',
+            message: 'Session initialized',
+            callId: callId,
+            user: call.user.email,
+            organization: call.organization.name,
+          })
+        );
         next();
       } catch (error) {
         const message = 'Call ID not valid.';
