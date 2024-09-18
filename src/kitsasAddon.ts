@@ -244,6 +244,9 @@ export class KitsasAddon {
     const callId = req.query.callId as string;
     if (!callId) {
       if (session.call) {
+        req.app.locals.info = session.call;
+        req.app.locals.language = session.language;
+        req.app.locals.callId = session.callId;
         next();
       } else {
         const message =
@@ -260,21 +263,14 @@ export class KitsasAddon {
       }
       try {
         const call = await this.connection.getAddonCallInfo(callId as string);
+        session.callId = callId;
+        req.app.locals.callId = callId;
         session.call = call;
         req.app.locals.info = call;
         session.language = (req.query['language'] as string) || 'fi';
         req.app.locals.language = session.language;
         session.data = {};
         req.session.save();
-        console.debug(
-          JSON.stringify({
-            level: 'DEBUG',
-            message: 'Session initialized',
-            callId: callId,
-            user: call.user.email,
-            organization: call.organization.name,
-          })
-        );
         next();
       } catch (error) {
         const message = 'Call ID not valid.';
