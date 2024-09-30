@@ -4,7 +4,7 @@ import { NextFunction, Request, Response, Router } from 'express';
 
 import { KitsasAddon } from './kitsasAddon';
 
-type MaintenanceFunction = () => Promise<void>;
+type MaintenanceFunction = (options?: unknown) => Promise<void>;
 
 export class MaintenanceRouter {
   private addon: KitsasAddon;
@@ -109,7 +109,7 @@ export class MaintenanceRouter {
       return;
     }
     try {
-      await func();
+      await func(req.body.options);
     } catch (error) {
       console.error(
         JSON.stringify({
@@ -128,6 +128,7 @@ export class MaintenanceRouter {
         level: 'INFO',
         message: 'Maintenance function executed',
         action: action,
+        options: req.body.options,
       })
     );
     res.status(200).send(`Maintenance ${action} executed`);
