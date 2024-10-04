@@ -263,13 +263,15 @@ export class KitsasAddon {
       }
       try {
         const call = await this.connection.getAddonCallInfo(callId as string);
+        if (!session || session.callId !== callId) {
+          session.data = {};
+        }
         session.callId = callId;
         req.app.locals.callId = callId;
         session.call = call;
         req.app.locals.info = call;
         session.language = (req.query['language'] as string) || 'fi';
         req.app.locals.language = session.language;
-        session.data = {};
         req.session.save();
         next();
       } catch (error) {
